@@ -1,0 +1,9 @@
+.auth-container {
+    background-image: url(./assets/images/auth-container.png);
+    background-position: center center;
+    background-size: cover;
+}
+.bg-ovelay {
+    background: linear-gradient(51.22deg, rgba(55, 140, 47, 0.63) -22.39%, rgba(0, 0, 0, 0.6237) 61.76%);
+}
+
