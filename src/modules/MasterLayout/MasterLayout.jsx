@@ -1,14 +1,16 @@
 import { Outlet } from "react-router-dom";
-import Header from "../shared/Header/Header";
 import NavBar from "../shared/NavBar/NavBar";
+import SidBar from "../shared/Sidebar/SidBar";
 
-export default function MasterLayout() {
+// eslint-disable-next-line react/prop-types
+export default function MasterLayout({loginData}) {
+  
   return (
     <div className="d-flex">
-        <div className="w-25 bg-info">SidBar</div>
+        <div className=""><SidBar/>
+        </div>
         <div className="w-100">
-            <NavBar/>
-            <Header/>
+            <NavBar loginData={loginData}/>
             <Outlet/>
         </div>
     </div>

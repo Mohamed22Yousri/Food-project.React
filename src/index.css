@@ -1,9 +1,41 @@
 .auth-container {
-    background-image: url(./assets/images/auth-container.png);
-    background-position: center center;
-    background-size: cover;
+  background-image: url(./assets/images/auth-container.png);
+  background-position: center center;
+  background-size: cover;
 }
 .bg-ovelay {
-    background: linear-gradient(51.22deg, rgba(55, 140, 47, 0.63) -22.39%, rgba(0, 0, 0, 0.6237) 61.76%);
+  background: linear-gradient(
+    51.22deg,
+    rgba(55, 140, 47, 0.63) -22.39%,
+    rgba(0, 0, 0, 0.6237) 61.76%
+  );
 }
 
+.container-sidbar .ps-sidebar-container {
+  background-color: #1f263e;
+  height: 100vh;
+  border-top-right-radius: 130px;
+}
+.container-sidbar .ps-menu-button {
+  color: #fff !important;
+  transition: 0.5s;
+}
+.container-sidbar .ps-menu-button:hover {
+  background-color: #00924d1a !important;
+}
+.container-sidbar .logo-menu-item .ps-menu-button:hover {
+  background: transparent !important;
+}
+.container-sidbar .ps-collapsed , .container-sidbar .css-1wvake5 {
+  border: none !important;
+}
+.modal-header button {
+  padding: 8px 8px;
+  border: 2px solid red;
+  border-radius: 50%;
+}
+.header-container {
+  background-image: url(./assets/images/Header.jpeg);
+  background-repeat: no-repeat;
+  border-radius: 20px;
+}

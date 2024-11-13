@@ -2,25 +2,31 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../assets/images/logo.png";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
-
-const LogIn = () => {
-
-    let {register, formState:{errors}, handleSubmit} = useForm()
-    let navgigate = useNavigate()
-    const onSubmit = async (data) => {
-      try {
-        await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Login", data)
-        toast.success("Login is successsfully")
-        navgigate('/dashboard')
-        
-        
-      } catch (error) {
-        toast.error(error.response.data.message)
-        
-      }      
+// eslint-disable-next-line react/prop-types
+export default function LogIn({ getToken }) {
+  let {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+  let navgigate = useNavigate();
+  const onSubmit = async (data) => {
+    try {
+      let res = await axios.post(
+        "https://upskilling-egypt.com:3006/api/v1/Users/Login",
+        data
+      );
+      localStorage.setItem("token", res.data.token);
+      getToken();
+      toast.success("Login is successsfully");
+      
+      navgigate("/dashboard");
+    } catch (error) {
+      toast.error(error.response.data.message);
     }
+  };
   return (
     <div className="auth-container">
       <div className="container-fluid bg-ovelay">
@@ -48,16 +54,19 @@ const LogIn = () => {
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                     {...register("email", {
-                      required:"Email Is Required",
+                      required: "Email Is Required",
                       pattern: {
                         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        message: "Email is not valid"
-                      }
-                    })
-                    }
+                        message: "Email is not valid",
+                      },
+                    })}
                   />
                 </div>
-                  {errors.email && <span className="text-danger px-2 mb-2 d-block">{errors.email.message}</span>}
+                {errors.email && (
+                  <span className="text-danger px-2 mb-2 d-block">
+                    {errors.email.message}
+                  </span>
+                )}
                 <div className="input-group mb-2">
                   <span className="input-group-text" id="basic-addon1">
                     <i className="fa fa-key"></i>
@@ -69,13 +78,15 @@ const LogIn = () => {
                     aria-label="Username"
                     aria-describedby="basic-addon1"
                     {...register("password", {
-                      required:"password Is Required",
-                    
-                    })
-                    }                  
+                      required: "password Is Required",
+                    })}
                   />
                 </div>
-                {errors.password && <span className="text-danger px-2 mb-2 d-block">{errors.password.message}</span>}
+                {errors.password && (
+                  <span className="text-danger px-2 mb-2 d-block">
+                    {errors.password.message}
+                  </span>
+                )}
                 <div className="links d-flex justify-content-between">
                   <Link
                     to="/register"
@@ -100,6 +111,4 @@ const LogIn = () => {
       </div>
     </div>
   );
-};
-
-export default LogIn;
+}
