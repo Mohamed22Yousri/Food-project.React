@@ -10,11 +10,17 @@
     rgba(0, 0, 0, 0.6237) 61.76%
   );
 }
+.container-sidbar {
+  background-color: #1f263e;
+  border-top-right-radius: 130px;
 
+  
+}
 .container-sidbar .ps-sidebar-container {
   background-color: #1f263e;
-  height: 100vh;
   border-top-right-radius: 130px;
+  height: 100vh;
+
 }
 .container-sidbar .ps-menu-button {
   color: #fff !important;

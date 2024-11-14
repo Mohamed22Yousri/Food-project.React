@@ -12,12 +12,12 @@ import RecipeData from "./modules/Recipe/RecipeData";
 import AuthLayout from "./modules/AuthLayout/AuthLayout";
 import MasterLayout from "./modules/MasterLayout/MasterLayout";
 import Categorydata from "./modules/category/Categorydata";
-import Dashboard from "./modules/dashboard/dashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import ProtectRoute from "./modules/ProtectRoute/ProtectRoute";
+import Dashboard from "./modules/dashboard/dashboard";
 
 function App() {
   const [loginData, setLoginData] = useState(null);
@@ -55,7 +55,7 @@ function App() {
       ),
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Dashboard  loginData={loginData} /> },
+        { index: true, element: <Dashboard loginData={loginData} /> },
         { path: "category-list", element: <CategoryList/> },
         { path: "category-data", element: <Categorydata /> },
         { path: "recipe-list", element: <RecipeList /> },

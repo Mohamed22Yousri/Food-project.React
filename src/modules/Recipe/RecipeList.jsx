@@ -3,10 +3,10 @@ import logoHeader from "../../assets/images/category-logo.png";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import logoDelete from "../../assets/images/img-delet.png";
 import { toast } from "react-toastify";
+import DeleteConformation from "../shared/DeleteConformation/DeleteConformation";
+import NoData from "../shared/NoData/NoData";
+import logoDelete from "../../assets/images/img-delet.png";
 
 export default function Recipe() {
   const [recpies, setRecpies] = useState([]);
@@ -18,7 +18,7 @@ export default function Recipe() {
     setShow(true);
     setRecpieId(id);
   };
-  let deletItem = async () => {
+  let deleteRecipe = async () => {
     await axios.delete(
       `https://upskilling-egypt.com:3006/api/v1/Recipe/${recpieId}`,
       {
@@ -58,63 +58,62 @@ export default function Recipe() {
             Add New Category
           </button>
         </div>
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Images</th>
-              <th scope="col">Price</th>
-              <th scope="col">Description</th>
-              <th scope="col">Tag</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recpies.map((recpie) => (
-              <tr key={recpie.id}>
-                <td>{recpie.name}</td>
-                <td style={{ width: "20%" }}>
-                  <div>
-                    <img
-                      className="w-25"
-                      src={`https://upskilling-egypt.com:3006/${recpie.imagePath}`}
-                      alt=""
-                    />
-                  </div>
-                </td>
-                <td>{recpie.price}</td>
-                <td className="w-25">{recpie.description}</td>
-                <td>{recpie.tag.name}</td>
-                <td>
-                  <i
-                    onClick={() => handleShow(recpie.id)}
-                    style={{ cursor: "pointer" }}
-                    className="fa-solid fa-trash ms-1 text-danger "
-                  ></i>
-                  <i className="fa-solid fa-pen-to-square mx-3 text-warning"></i>
-                </td>{" "}
+        {recpies.length > 0 ? (
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Images</th>
+                <th scope="col">Price</th>
+                <th scope="col">Description</th>
+                <th scope="col">Tag</th>
+                <th scope="col">category</th>
+                <th scope="col">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {recpies.map((recpie) => (
+                <tr key={recpie.id}>
+                  <td>{recpie.name}</td>
+                  <td style={{ width: "20%" }}>
+                    <div className="p-0">
+                      {recpie.imagePath ? (
+                        <img
+                          className="w-25"
+                          src={`https://upskilling-egypt.com:3006/${recpie.imagePath}`}
+                          alt=""
+                        />
+                      ) : (
+                        <img className="w-25" src={logoDelete} alt="" />
+                      )}
+                    </div>
+                  </td>
+                  <td>{recpie.price}</td>
+                  <td className="w-25">{recpie.description}</td>
+                  <td>{recpie.tag.name}</td>
+                  <td>{recpie.category}</td>
+                  <td>
+                    <i
+                      onClick={() => handleShow(recpie.id)}
+                      style={{ cursor: "pointer" }}
+                      className="fa-solid fa-trash ms-1 text-danger "
+                    ></i>
+                    <i className="fa-solid fa-pen-to-square mx-3 text-warning"></i>
+                  </td>{" "}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <NoData />
+        )}
       </div>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>
-          <div className="text-center">
-            <img src={logoDelete} alt="" />
-            <h5 className="my-4">Delete This Recipe</h5>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            className="btn btn-light border border-danger text-danger"
-            onClick={deletItem}
-          >
-            Delete this item
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DeleteConformation
+        show={show}
+        deleteFun={deleteRecipe}
+        handleClose={handleClose}
+        deleteItem={"Recipe"}
+      />
     </>
   );
 }
