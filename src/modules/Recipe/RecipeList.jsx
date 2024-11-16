@@ -1,17 +1,19 @@
 import Header from "../shared/Header/Header";
 import logoHeader from "../../assets/images/category-logo.png";
 import { useState } from "react";
-import axios from "axios";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import DeleteConformation from "../shared/DeleteConformation/DeleteConformation";
 import NoData from "../shared/NoData/NoData";
 import logoDelete from "../../assets/images/img-delet.png";
+import { axiosInstance, RECIPES } from "../Services/Urls/Urls";
+import Loading from "../shared/Loading";
 
 export default function Recipe() {
   const [recpies, setRecpies] = useState([]);
   const [show, setShow] = useState(false);
   const [recpieId, setRecpieId] = useState();
+  const [loading, setLoading] = useState(true);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -19,12 +21,7 @@ export default function Recipe() {
     setRecpieId(id);
   };
   let deleteRecipe = async () => {
-    await axios.delete(
-      `https://upskilling-egypt.com:3006/api/v1/Recipe/${recpieId}`,
-      {
-        headers: { Authorization: localStorage.getItem("token") },
-      }
-    );
+    await axiosInstance.delete(RECIPES.DELETE_AND_EDITE_RECIPES(recpieId));
     toast.success("Delete Recipe");
     getRecpies();
     handleClose();
@@ -32,12 +29,15 @@ export default function Recipe() {
 
   let getRecpies = async () => {
     try {
-      let res = await axios.get(
-        "https://upskilling-egypt.com:3006/api/v1/Recipe/?pageSize=20&pageNumber=1"
+      setLoading(true);
+      let res = await axiosInstance.get(
+        `${RECIPES.GET_AND_POST_RECIPES}?pageSize=20&pageNumber=1`
       );
       setRecpies(res.data.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -54,6 +54,7 @@ export default function Recipe() {
       <div className="container-fluid my-4">
         <div className="d-flex justify-content-between align-items-center">
           <h4>Recipes Table Details</h4>
+          <Loading loading={loading} />
           <button className="btn btn-success py-2 px-4">
             Add New Category
           </button>
