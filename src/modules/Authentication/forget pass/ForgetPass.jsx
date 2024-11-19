@@ -47,7 +47,7 @@ export default function ForgetPass() {
           <span className="text-danger">{errors.email.message}</span>
         )}
         <div>
-          <button className="btn btn-success w-100 mt-5 mb-2">
+          <button className="btn btn-success w-100 mt-5 mb-2" disabled={isSubmitting}>
             {isSubmitting ? "Submitting ..." : "Submit"}
           </button>
         </div>

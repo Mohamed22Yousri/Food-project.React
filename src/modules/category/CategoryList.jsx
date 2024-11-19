@@ -8,7 +8,7 @@ import DeleteConformation from "../shared/DeleteConformation/DeleteConformation"
 import NoData from "../shared/NoData/NoData";
 import { useForm } from "react-hook-form";
 import { axiosInstance, CATEGORIES_URLS } from "../Services/Urls/Urls";
-import Loading from "../shared/Loading";
+import Loading from "../shared/Loading/Loading";
 
 export default function CategoryList() {
   const [show, setShow] = useState(false);
@@ -24,7 +24,7 @@ export default function CategoryList() {
     try {
       setLoading(true);
       let response = await axiosInstance.get(
-        `${CATEGORIES_URLS.GET_AND_POST_CATEGORIES}?pageSize=20&pageNumber=1`
+        `${CATEGORIES_URLS.GET_AND_POST_CATEGORIES}?pageSize=10&pageNumber=1`
       );
       setCategories(response.data.data);
     } catch (error) {
@@ -53,6 +53,7 @@ export default function CategoryList() {
   const handleShowAdd = () => setShowAdd(true);
   const handleCloseAdd = () => setShowAdd(false);
   let {
+    
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
@@ -62,7 +63,7 @@ export default function CategoryList() {
   const onSubmit = async (data) => {
     try {
       await axiosInstance.post(
-        `${CATEGORIES_URLS.GET_AND_POST_CATEGORIES}?pageSize=20&pageNumber=1`,
+        `${CATEGORIES_URLS.GET_AND_POST_CATEGORIES}`,
         data
       );
       reset();

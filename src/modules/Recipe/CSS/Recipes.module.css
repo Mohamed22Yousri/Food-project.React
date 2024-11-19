@@ -1,0 +1,28 @@
+.header {
+  background: #f0ffef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 4.75rem;
+  border-radius: 10px;
+}
+.header .title {
+  max-width: 30rem;
+}
+.recipe-from {
+  margin-block: 5rem;
+  margin-inline: 9rem;
+  gap: 1rem;
+}
+
+.recipe-input {
+  width: 100% !important;
+}
+.recipe-input input::placeholder {
+  color: #00000033;
+}
+.recipe-input input,
+.recipe-input select,
+.recipe-input textarea {
+  background-color: #f7f7f7;
+}

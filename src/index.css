@@ -13,6 +13,11 @@
 .container-sidbar {
   background-color: #1f263e;
   border-top-right-radius: 130px;
+  position: sticky;
+  left: 0;
+  top: 0;
+  align-self: flex-start;
+
 
   
 }

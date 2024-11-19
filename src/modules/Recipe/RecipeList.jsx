@@ -7,7 +7,8 @@ import DeleteConformation from "../shared/DeleteConformation/DeleteConformation"
 import NoData from "../shared/NoData/NoData";
 import logoDelete from "../../assets/images/img-delet.png";
 import { axiosInstance, RECIPES } from "../Services/Urls/Urls";
-import Loading from "../shared/Loading";
+import Loading from "../shared/Loading/Loading";
+import { Link } from "react-router-dom";
 
 export default function Recipe() {
   const [recpies, setRecpies] = useState([]);
@@ -33,6 +34,7 @@ export default function Recipe() {
       let res = await axiosInstance.get(
         `${RECIPES.GET_AND_POST_RECIPES}?pageSize=20&pageNumber=1`
       );
+
       setRecpies(res.data.data);
     } catch (error) {
       console.log(error);
@@ -52,12 +54,15 @@ export default function Recipe() {
         desc={`You can now add your items that any user can order it from the Application and you can edit`}
       />
       <div className="container-fluid my-4">
-        <div className="d-flex justify-content-between align-items-center">
+        <div className="d-flex justify-content-between align-items-center pt-2 pb-3">
           <h4>Recipes Table Details</h4>
           <Loading loading={loading} />
-          <button className="btn btn-success py-2 px-4">
-            Add New Category
-          </button>
+          <Link
+            to="/dashboard/recipe-list/recipe-data"
+            className="btn btn-success py-2 px-4"
+          >
+            Add New Recipes
+          </Link>
         </div>
         {recpies.length > 0 ? (
           <table className="table">
@@ -74,14 +79,14 @@ export default function Recipe() {
             </thead>
             <tbody>
               {recpies.map((recpie) => (
-                <tr key={recpie.id}>
-                  <td>{recpie.name}</td>
+                <tr key={recpie?.id}>
+                  <td>{recpie?.name}</td>
                   <td style={{ width: "20%" }}>
                     <div className="p-0">
-                      {recpie.imagePath ? (
+                      {recpie?.imagePath ? (
                         <img
                           className="w-25"
-                          src={`https://upskilling-egypt.com:3006/${recpie.imagePath}`}
+                          src={`https://upskilling-egypt.com:3006/${recpie?.imagePath}`}
                           alt=""
                         />
                       ) : (
@@ -89,18 +94,23 @@ export default function Recipe() {
                       )}
                     </div>
                   </td>
-                  <td>{recpie.price}</td>
-                  <td className="w-25">{recpie.description}</td>
-                  <td>{recpie.tag.name}</td>
-                  <td>{recpie.category}</td>
+                  <td>{recpie?.price}</td>
+                  <td className="w-25">{recpie?.description}</td>
+                  <td>{recpie?.tag?.name}</td>
+                  <td>{recpie?.category?.name}</td>
                   <td>
                     <i
-                      onClick={() => handleShow(recpie.id)}
+                      onClick={() => handleShow(recpie?.id)}
                       style={{ cursor: "pointer" }}
                       className="fa-solid fa-trash ms-1 text-danger "
                     ></i>
-                    <i className="fa-solid fa-pen-to-square mx-3 text-warning"></i>
-                  </td>{" "}
+                    <Link to={`/dashboard/recipe-list/${recpie.id}`}>
+                      <i
+                        style={{ cursor: "pointer" }}
+                        className="fa-solid fa-pen-to-square mx-3 text-warning"
+                      ></i>
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
