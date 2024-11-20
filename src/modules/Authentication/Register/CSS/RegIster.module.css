@@ -1,0 +1,41 @@
+
+
+.input-container {
+    position: relative;
+    width: 100%; 
+    margin-bottom: 10px;
+  }
+  .input-container input {
+    background-color: #F7F7F7;
+    border: none;
+    outline: none;
+
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 40px 10px 40px; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .icon-left,
+  .icon-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    cursor: pointer;
+  }
+  
+  .icon-left {
+    left: 10px; 
+  }
+  
+  .icon-right {
+    right: 10px; 
+  }
+
+
+

@@ -9,11 +9,18 @@ import {
 } from "../Services/Urls/Urls";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import BeforeUnLoad from "../Hooks/BeforeUnLoad";
+
 const RecipeData = () => {
+  
   const [tags, setTags] = useState([]);
   const params = useParams();
   const [categories, setCategories] = useState([]);
   let navigate = useNavigate();
+  BeforeUnLoad(()=> {
+    console.log("hello");
+    
+  })
   let {
     register,
     formState: { errors, isSubmitting },
@@ -32,16 +39,16 @@ const RecipeData = () => {
     }
 
     try {
-    let res =  await axiosInstance[isNewRecipe ? "post" : "put"](
+      const res = await axiosInstance[isNewRecipe ? "post" : "put"](
         isNewRecipe
           ? RECIPES.GET_AND_POST_RECIPES
           : RECIPES.DELETE_AND_EDITE_RECIPES(recipeId),
         formData
       );
+      console.log(isNewRecipe);
+
       console.log(res);
-      console.log(recipeId);
-      
-      
+
       navigate("/dashboard/recipe-list");
 
       reset();
@@ -51,7 +58,7 @@ const RecipeData = () => {
     }
   };
   const recipeId = params.recipeId;
-  const isNewRecipe = recipeId == "recipe-data";
+  const isNewRecipe = recipeId == undefined;
   useEffect(() => {
     const getTag = async () => {
       let res = await axiosInstance.get(TAG.GET_TAG);
@@ -79,6 +86,7 @@ const RecipeData = () => {
             setValue("description", recipe?.description);
             setValue("tagId", recipe?.tag?.id);
             setValue("categoriesIds", recipe?.catogrya?.[0]?.id);
+            console.log(recipeId);
           };
           getrecipeId();
         }
@@ -86,7 +94,9 @@ const RecipeData = () => {
         console.log(error);
       }
     })();
-  }, [recipeId, setValue]);
+  }, [recipeId, setValue, isNewRecipe]);
+
+ 
 
   return (
     <>
@@ -228,9 +238,12 @@ const RecipeData = () => {
           className="d-flex justify-content-end align-items-center"
           style={{ gap: "20px" }}
         >
-          <button className="btn border border-success px-5 text-success">
+          <Link
+            to="/dashboard/recipe-list"
+            className="btn border border-success px-5 text-success"
+          >
             Cancel
-          </button>
+          </Link>
           <button
             disabled={isSubmitting}
             className="btn btn-success px-4 py-1 "

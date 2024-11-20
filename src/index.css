@@ -3,12 +3,18 @@
   background-position: center center;
   background-size: cover;
 }
+.register-container {
+  background-image: none;
+}
 .bg-ovelay {
   background: linear-gradient(
     51.22deg,
     rgba(55, 140, 47, 0.63) -22.39%,
     rgba(0, 0, 0, 0.6237) 61.76%
   );
+}
+.Register-logo {
+  width: 40%;
 }
 .container-sidbar {
   background-color: #1f263e;
@@ -50,3 +56,8 @@
   background-repeat: no-repeat;
   border-radius: 20px;
 }
+
+
+
+
+

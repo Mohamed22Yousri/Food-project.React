@@ -25,7 +25,8 @@ export default function LogIn({ getToken }) {
     }
   };
   return (
-    <>      <div className="title mb-4">
+    <>
+      <div className="title mb-4">
         <h3 className="h5">Login</h3>
         <span className="text-muted">
           Welcome Back! Please enter your details
@@ -77,7 +78,10 @@ export default function LogIn({ getToken }) {
           </Link>
         </div>
         <div>
-          <button className="btn btn-success w-100 my-3" disabled={isSubmitting}> 
+          <button
+            className="btn btn-success w-100 my-3"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Submitting ..." : "Login"}
           </button>
         </div>
