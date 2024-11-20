@@ -18,6 +18,7 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import ProtectRoute from "./modules/ProtectRoute/ProtectRoute";
 import Dashboard from "./modules/dashboard/dashboard";
+import Verification from "./modules/Authentication/Verify/Verification";
 
 function App() {
   const [loginData, setLoginData] = useState(null);
@@ -44,6 +45,7 @@ function App() {
         { path: "forget-pass", element: <ForgetPass /> },
         { path: "reset-pass", element: <ResetPass /> },
         { path: "register", element: <RegIster /> },
+        { path: "verify", element: <Verification /> },
       ],
     },
     {

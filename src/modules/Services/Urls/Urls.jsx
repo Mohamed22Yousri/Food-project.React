@@ -12,7 +12,9 @@ export const USERS_URLS = {
   LOGIN: "Users/Login",
   FORGET_PASSWORD: "Users/Reset/Request",
   RESET_PASSWORD: "Users/Reset",
-  CREATE_USER : "Users/Create"
+  CREATE_USER: "Users/Create",
+  REGISTER_USER: "Users/Register",
+  VERIFY_USER: "Users/verify",
 };
 
 //Category

@@ -4,7 +4,7 @@ import "./CSS/RegIster.module.css";
 import { VALID_EMAIL, VALID_PASSWORD } from "../../Services/Validition/Valid";
 import { axiosInstance, USERS_URLS } from "../../Services/Urls/Urls";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function RegIster() {
   let navgigate = useNavigate();
@@ -16,10 +16,10 @@ export default function RegIster() {
   } = useForm();
   const onSubmitRegi = async (data) => {
     try {
-      await axiosInstance.post(USERS_URLS.CREATE_USER, data);
+      await axiosInstance.post(USERS_URLS.REGISTER_USER, data);
       toast.success("Register is successsfully");
 
-      navgigate("/login");
+      navgigate("/verify");
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -149,7 +149,11 @@ export default function RegIster() {
               {errors.confirmPassword.message}
             </span>
           )}
+          <div className="text-end">
+          <Link to='/login' className={`${styles["links"]}`}>Login Now?</Link>
+          </div>
         </div>
+
         <div className="text-center">
           <button disabled={isSubmitting} className="btn btn-success mt-5 w-75">
             {isSubmitting ? "registration ..." : "Register"}
