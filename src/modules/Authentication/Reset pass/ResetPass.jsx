@@ -1,14 +1,20 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { axiosInstance, USERS_URLS } from "../../Services/Urls/Urls";
+import { useState } from "react";
 
 export default function ResetPass() {
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isConfirmValid, setIsConfirmValid] = useState(false);
+
+
+  const location = useLocation()
   let {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm({defaultValues:{email:location.state}});
   let navigate = useNavigate();
   const onSubmit = (data) => {
     try {
@@ -34,6 +40,7 @@ export default function ResetPass() {
             <i className="fa fa-envelope"></i>
           </span>
           <input
+          disabled={true}
             type="text"
             className="form-control"
             placeholder="Email"
@@ -78,7 +85,7 @@ export default function ResetPass() {
             <i className="fa fa-key"></i>
           </span>
           <input
-            type="password"
+            type={isPasswordValid ? "text" : "password"}
             className="form-control"
             placeholder="New Password"
             aria-label="Username"
@@ -87,6 +94,18 @@ export default function ResetPass() {
               required: "Password is required",
             })}
           />
+            <button
+            onClick={() => setIsPasswordValid((prev) => !prev)}
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onMouseUp={(e) => e.preventDefault()}
+            className="input-group-text"
+            id="basic-addon1"
+          >
+            <i
+              className={`fa ${isPasswordValid ? "fa-eye" : "fa-eye-slash"}`}
+            ></i>
+          </button>
         </div>
         {errors.password && (
           <span className="text-danger px-2 mb-2 d-block">
@@ -98,13 +117,25 @@ export default function ResetPass() {
             <i className="fa fa-key"></i>
           </span>
           <input
-            type="password"
+            type={isConfirmValid ? "text" : "password"}
             className="form-control"
             placeholder="Confirm New Password"
             aria-label="Username"
             aria-describedby="basic-addon1"
             {...register("confirmPassword")}
           />
+            <button
+            onClick={() => setIsConfirmValid((prev) => !prev)}
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onMouseUp={(e) => e.preventDefault()}
+            className="input-group-text"
+            id="basic-addon1"
+          >
+            <i
+              className={`fa ${isConfirmValid ? "fa-eye" : "fa-eye-slash"}`}
+            ></i>
+          </button>
         </div>
         <div>
           <button className="w-100 btn btn-success my-3">Reset Password</button>

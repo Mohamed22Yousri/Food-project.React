@@ -26,3 +26,10 @@
 .recipe-input textarea {
   background-color: #f7f7f7;
 }
+
+@media only screen and (max-width: 767px) {
+  .header {
+    display: block;
+    text-align: center;
+  }
+}

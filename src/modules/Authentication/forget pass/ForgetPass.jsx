@@ -1,10 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { axiosInstance, USERS_URLS } from "../../Services/Urls/Urls";
 import { VALID_EMAIL } from "../../Services/Validition/Valid";
 
 export default function ForgetPass() {
+
+  
   let navigate = useNavigate();
   let {
     register,
@@ -14,7 +16,7 @@ export default function ForgetPass() {
   const onSubmit = (data) => {
     try {
       axiosInstance.post(USERS_URLS.FORGET_PASSWORD, data);
-      navigate("/reset-pass");
+      navigate("/reset-pass",{state:data.email});
       toast.success("Email is successsfully");
     } catch (error) {
       console.log(error.response.data.message);
@@ -47,7 +49,10 @@ export default function ForgetPass() {
           <span className="text-danger">{errors.email.message}</span>
         )}
         <div>
-          <button className="btn btn-success w-100 mt-5 mb-2" disabled={isSubmitting}>
+          <button
+            className="btn btn-success w-100 mt-5 mb-2"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Submitting ..." : "Submit"}
           </button>
         </div>

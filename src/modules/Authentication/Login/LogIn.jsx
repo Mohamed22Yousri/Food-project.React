@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { axiosInstance, USERS_URLS } from "../../Services/Urls/Urls";
 import { VALID_EMAIL, VALID_PASSWORD } from "../../Services/Validition/Valid";
+import { useState } from "react";
 
-// eslint-disable-next-line react/prop-types
-export default function LogIn({ getToken }) {
+export default function LogIn({loginData}) {
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+
   let {
     register,
     formState: { errors, isSubmitting },
@@ -16,12 +18,14 @@ export default function LogIn({ getToken }) {
     try {
       let res = await axiosInstance.post(USERS_URLS.LOGIN, data);
       localStorage.setItem("token", res.data.token);
-      getToken();
+      loginData();
       toast.success("Login is successsfully");
-
-      navgigate("/dashboard");
+      navgigate("/dashboard", { replace: true });
+      console.log("hello");
+      
+      
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message);
     }
   };
   return (
@@ -56,13 +60,25 @@ export default function LogIn({ getToken }) {
             <i className="fa fa-key"></i>
           </span>
           <input
-            type="password"
+            type={isPasswordValid ? "text" : "password"}
             className="form-control "
             placeholder="Password"
             aria-label="Username"
             aria-describedby="basic-addon1"
             {...register("password", VALID_PASSWORD)}
           />
+          <button
+            onClick={() => setIsPasswordValid((prev) => !prev)}
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onMouseUp={(e) => e.preventDefault()}
+            className="input-group-text"
+            id="basic-addon1"
+          >
+            <i
+              className={`fa ${isPasswordValid ? "fa-eye" : "fa-eye-slash"}`}
+            ></i>
+          </button>
         </div>
         {errors.password && (
           <span className="text-danger px-2 mb-2 d-block">

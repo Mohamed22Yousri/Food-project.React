@@ -15,6 +15,9 @@ export const USERS_URLS = {
   CREATE_USER: "Users/Create",
   REGISTER_USER: "Users/Register",
   VERIFY_USER: "Users/verify",
+  USERS_LIST: "Users/",
+  DELETE_AND_VIEW_USER: (id) => `Users/${id}`,
+  CHANGE_PASSWORD: "Users/ChangePassword",
 };
 
 //Category

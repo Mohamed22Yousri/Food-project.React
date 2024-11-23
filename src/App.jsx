@@ -39,9 +39,9 @@ function App() {
       children: [
         {
           index: true,
-          element: <LogIn getToken={getToken}/>,
+          element: <LogIn loginData={loginData}/>,
         },
-        { path: "login", element: <LogIn getToken={getToken} /> },
+        { path: "login", element: <LogIn loginData={loginData} /> },
         { path: "forget-pass", element: <ForgetPass /> },
         { path: "reset-pass", element: <ResetPass /> },
         { path: "register", element: <RegIster /> },
@@ -52,7 +52,7 @@ function App() {
       path: "dashboard",
       element: (
         <ProtectRoute loginData={loginData}>
-          <MasterLayout loginData={loginData} />
+          <MasterLayout setLoginData={setLoginData} loginData={loginData} />
         </ProtectRoute>
       ),
       errorElement: <NotFound />,

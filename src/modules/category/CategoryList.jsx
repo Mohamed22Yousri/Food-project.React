@@ -11,6 +11,8 @@ import { axiosInstance, CATEGORIES_URLS } from "../Services/Urls/Urls";
 import Loading from "../shared/Loading/Loading";
 
 export default function CategoryList() {
+  const [arrayOfPages, setArrayOfPages] = useState([]);
+
   const [show, setShow] = useState(false);
   const [selectId, setSelectId] = useState();
   const handleShow = (id) => {
@@ -20,11 +22,19 @@ export default function CategoryList() {
   const handleClose = () => setShow(false);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
-  let getcategory = async () => {
+  let getcategory = async (PageSize, pageNo, name) => {
     try {
       setLoading(true);
       let response = await axiosInstance.get(
-        `${CATEGORIES_URLS.GET_AND_POST_CATEGORIES}?pageSize=10&pageNumber=1`
+        CATEGORIES_URLS.GET_AND_POST_CATEGORIES,
+        {
+          params: { pageSize: PageSize, pageNumber: pageNo, name: name },
+        }
+      );
+      setArrayOfPages(
+        Array(response.data.totalNumberOfPages)
+          .fill()
+          .map((_, i) => i + 1)
       );
       setCategories(response.data.data);
     } catch (error) {
@@ -33,8 +43,11 @@ export default function CategoryList() {
       setLoading(false);
     }
   };
+  const getNameVal = (input) => {
+    getcategory(4, 1, input.target.value);
+  };
   useEffect(() => {
-    getcategory();
+    getcategory(4, 1);
   }, []);
   let deleteCategory = async () => {
     try {
@@ -53,7 +66,6 @@ export default function CategoryList() {
   const handleShowAdd = () => setShowAdd(true);
   const handleCloseAdd = () => setShowAdd(false);
   let {
-    
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
@@ -69,7 +81,7 @@ export default function CategoryList() {
       reset();
       toast.success("Add Category");
       handleCloseAdd();
-      getcategory();
+      getcategory(4, 1);
     } catch (error) {
       console.log(error);
     }
@@ -90,7 +102,7 @@ export default function CategoryList() {
         data
       );
       toast.success("Edit Category");
-      getcategory();
+      getcategory(4, 1);
     } catch (error) {
       console.log(error);
     }
@@ -112,36 +124,84 @@ export default function CategoryList() {
             Add New Category
           </button>
         </div>
+        <div>
+          <div className="row my-4">
+            <div className="col-12">
+              <input
+                onChange={getNameVal}
+                type="text"
+                placeholder="User Name ..."
+                className="form-control"
+              />
+            </div>
+          </div>
+        </div>
         {categories.length > 0 ? (
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">creationDate</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories.map((category) => (
-                <tr key={category.id}>
-                  <th scope="row">{category.name}</th>
-                  <td> {category.creationDate}</td>
-                  <td>
-                    <i
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleShow(category.id)}
-                      className="fa-solid fa-trash ms-1 text-danger "
-                    ></i>
-                    <i
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleShowEdit(category.id, category)}
-                      className="fa-solid fa-pen-to-square mx-3 text-warning"
-                    ></i>
-                  </td>
+          <div>
+            <table className="table text-center mt-4">
+              <thead>
+                <tr className="table-primary">
+                  <th scope="col">Name</th>
+                  <th scope="col">creationDate</th>
+                  <th scope="col">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {categories.map((category) => (
+                  <tr key={category.id}>
+                    <th scope="row">{category.name}</th>
+                    <td> {category.creationDate}</td>
+                    <td>
+                      <i
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleShow(category.id)}
+                        className="fa-solid fa-trash ms-1 text-danger "
+                      ></i>
+                      <i
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleShowEdit(category.id, category)}
+                        className="fa-solid fa-pen-to-square mx-3 text-warning"
+                      ></i>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+              <ul className="pagination d-flex justify-content-center">
+                <li className="page-item">
+                  <a
+                    style={{ cursor: "pointer" }}
+                    className="page-link"
+                    aria-label="Previous"
+                  >
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                {arrayOfPages.map((pages) => (
+                  <li
+                    className="page-item"
+                    key={pages}
+                    onClick={() => getcategory(4, pages)}
+                  >
+                    <a style={{ cursor: "pointer" }} className="page-link">
+                      {pages}
+                    </a>
+                  </li>
+                ))}
+
+                <li className="page-item">
+                  <a
+                    style={{ cursor: "pointer" }}
+                    className="page-link"
+                    aria-label="Next"
+                  >
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         ) : (
           <NoData />
         )}

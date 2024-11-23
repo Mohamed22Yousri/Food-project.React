@@ -56,6 +56,10 @@
   background-repeat: no-repeat;
   border-radius: 20px;
 }
+input , select, textarea, a {
+  box-shadow: none !important;
+}
+
 
 
 

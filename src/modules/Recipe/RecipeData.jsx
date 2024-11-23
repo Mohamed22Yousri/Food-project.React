@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import styles from "./CSS/Recipes.module.css";
+import styles from "../dashboard/CSS/Dashboard.module.css";
 import { useEffect, useState } from "react";
 import {
   axiosInstance,
@@ -100,7 +100,7 @@ const RecipeData = () => {
 
   return (
     <>
-      <header className={`${styles["header"]} mx-2`}>
+      <header className={`${styles["header"]} mx-2 container`}>
         <div className={styles["title"]}>
           <h3>
             Fill the <span className="text-success">Recipes</span> !

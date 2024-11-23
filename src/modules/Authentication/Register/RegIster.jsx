@@ -5,8 +5,11 @@ import { VALID_EMAIL, VALID_PASSWORD } from "../../Services/Validition/Valid";
 import { axiosInstance, USERS_URLS } from "../../Services/Urls/Urls";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function RegIster() {
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isConfirmValid, setIsConfirmValid] = useState(false);
   let navgigate = useNavigate();
 
   let {
@@ -75,14 +78,19 @@ export default function RegIster() {
           <div className={`${styles["input-container"]}`}>
             <i className={`${styles["icon-left"]} fas fa-lock`}></i>
             <input
-              type="password"
+              type={isPasswordValid ? "text" : "password"}
               className={`${styles["form-control"]}`}
               placeholder="password"
               id="password"
               {...register("password", VALID_PASSWORD)}
             />
             <i
-              className={`${styles["icon-right"]} fa fa-eye`}
+              onMouseDown={(e) => e.preventDefault()}
+              onMouseUp={(e) => e.preventDefault()}
+              onClick={() => setIsPasswordValid((prev) => !prev)}
+              className={`${styles["icon-right"]} ${
+                isPasswordValid ? " fa fa-eye" : "fa fa-eye-slash"
+              }`}
               id="togglePassword"
             ></i>
           </div>
@@ -133,14 +141,19 @@ export default function RegIster() {
           <div className={`${styles["input-container"]}`}>
             <i className={`${styles["icon-left"]}  fas fa-lock`}></i>{" "}
             <input
-              type="password"
+              type={isConfirmValid ? "text" : "password"}
               className={`${styles["form-control"]}`}
               placeholder="confirm-password"
               id="confirm-password"
               {...register("confirmPassword", VALID_PASSWORD)}
             />
             <i
-              className={`${styles["icon-right"]} fa fa-eye`}
+              onMouseDown={(e) => e.preventDefault()}
+              onMouseUp={(e) => e.preventDefault()}
+              onClick={() => setIsConfirmValid((prev) => !prev)}
+              className={`${styles["icon-right"]} ${
+                isConfirmValid ? " fa fa-eye" : "fa fa-eye-slash"
+              }`}
               id="togglePassword"
             ></i>
           </div>
@@ -150,7 +163,9 @@ export default function RegIster() {
             </span>
           )}
           <div className="text-end">
-          <Link to='/login' className={`${styles["links"]}`}>Login Now?</Link>
+            <Link to="/login" className={`${styles["links"]}`}>
+              Login Now?
+            </Link>
           </div>
         </div>
 

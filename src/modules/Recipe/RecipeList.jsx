@@ -6,15 +6,26 @@ import { toast } from "react-toastify";
 import DeleteConformation from "../shared/DeleteConformation/DeleteConformation";
 import NoData from "../shared/NoData/NoData";
 import logoDelete from "../../assets/images/img-delet.png";
-import { axiosInstance, RECIPES } from "../Services/Urls/Urls";
+import {
+  axiosInstance,
+  CATEGORIES_URLS,
+  RECIPES,
+  TAG,
+} from "../Services/Urls/Urls";
 import Loading from "../shared/Loading/Loading";
 import { Link } from "react-router-dom";
 
 export default function Recipe() {
   const [recpies, setRecpies] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [arrayOfPages, setArrayOfPages] = useState([]);
   const [show, setShow] = useState(false);
   const [recpieId, setRecpieId] = useState();
   const [loading, setLoading] = useState(true);
+  const [nameValu, setNameValu] = useState("");
+  const [tagValu, settagValu] = useState("");
+  const [catValu, setcatValu] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -28,11 +39,22 @@ export default function Recipe() {
     handleClose();
   };
 
-  let getRecpies = async () => {
+  let getRecpies = async (pageSize, pageNo, name, tag, cat) => {
     try {
       setLoading(true);
-      let res = await axiosInstance.get(
-        `${RECIPES.GET_AND_POST_RECIPES}?pageSize=20&pageNumber=1`
+      let res = await axiosInstance.get(RECIPES.GET_AND_POST_RECIPES, {
+        params: {
+          pageSize: pageSize,
+          pageNumber: pageNo,
+          name: name,
+          tagId: tag,
+          categoryId: cat,
+        },
+      });
+      setArrayOfPages(
+        Array(res.data.totalNumberOfPages)
+          .fill()
+          .map((_, i) => i + 1)
       );
 
       setRecpies(res.data.data);
@@ -42,8 +64,30 @@ export default function Recipe() {
       setLoading(false);
     }
   };
+  const getTag = async () => {
+    let res = await axiosInstance.get(TAG.GET_TAG);
+    setTags(res.data);
+  };
+  const getCategories = async () => {
+    let res = await axiosInstance.get(CATEGORIES_URLS.GET_AND_POST_CATEGORIES);
+    setCategories(res.data.data);
+  };
+  const getNameVal = (input) => {
+    setNameValu(input.target.value);
+    getRecpies(4, 1, input.target.value, tagValu, catValu);
+  };
+  const getTagVal = (input) => {
+    settagValu(input.target.value);
+    getRecpies(4, 1, nameValu, input.target.value, catValu);
+  };
+  const getCatVal = (input) => {
+    setcatValu(input.target.value);
+    getRecpies(4, 1, nameValu, tagValu, input.target.value);
+  };
   useEffect(() => {
-    getRecpies();
+    getRecpies(4, 1);
+    getTag();
+    getCategories();
   }, []);
 
   return (
@@ -64,57 +108,135 @@ export default function Recipe() {
             Add New Recipes
           </Link>
         </div>
-        {recpies.length > 0 ? (
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Images</th>
-                <th scope="col">Price</th>
-                <th scope="col">Description</th>
-                <th scope="col">Tag</th>
-                <th scope="col">category</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recpies.map((recpie) => (
-                <tr key={recpie?.id}>
-                  <td>{recpie?.name}</td>
-                  <td style={{ width: "20%" }}>
-                    <div className="p-0">
-                      {recpie?.imagePath ? (
-                        <img
-                          className="w-25"
-                          src={`https://upskilling-egypt.com:3006/${recpie?.imagePath}`}
-                          alt=""
-                        />
-                      ) : (
-                        <img className="w-25" src={logoDelete} alt="" />
-                      )}
-                    </div>
-                  </td>
-                  <td>{recpie?.price}</td>
-                  <td className="w-25">{recpie?.description}</td>
-                  <td>{recpie?.tag?.name}</td>
-                  <td>{recpie?.category?.name}</td>
-                  <td>
-                    <i
-                      onClick={() => handleShow(recpie?.id)}
-                      style={{ cursor: "pointer" }}
-                      className="fa-solid fa-trash ms-1 text-danger "
-                    ></i>
-                    <Link to={`/dashboard/recipe-list/${recpie.id}`}>
-                      <i
-                        style={{ cursor: "pointer" }}
-                        className="fa-solid fa-pen-to-square mx-3 text-warning"
-                      ></i>
-                    </Link>
-                  </td>
-                </tr>
+        <div className="row my-4">
+          <div className="col-6">
+            <input
+              onChange={getNameVal}
+              type="text"
+              placeholder="Search here ..."
+              className="form-control"
+            />
+          </div>
+          <div className="col-3">
+            <select
+              onChange={getTagVal}
+              className="form-select py-2 "
+              aria-label="Default select example"
+            >
+              <option selected value="">
+                Tag
+              </option>
+              {tags?.map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.name}
+                </option>
               ))}
-            </tbody>
-          </table>
+            </select>
+          </div>
+          <div className="col-3">
+            <select
+              onChange={getCatVal}
+              className="form-select py-2 "
+              aria-label="Default select example"
+            >
+              <option selected>Categ</option>
+              {categories?.map((catogry) => (
+                <option key={catogry.id} value={catogry.id}>
+                  {catogry.name}
+                </option>
+              ))}
+            </select>{" "}
+          </div>
+        </div>
+        {recpies.length > 0 ? (
+          <div className="">
+            <table className="table text-center mt-2 .table-container">
+              <thead>
+                <tr className="table-primary">
+                  <th scope="col">Name</th>
+                  <th scope="col">Images</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Tag</th>
+                  <th scope="col">category</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recpies.map((recpie) => (
+                  <tr key={recpie?.id}>
+                    <td className="align-middle">{recpie?.name}</td>
+                    <td style={{ width: "20%" }}>
+                      <div className="p-0">
+                        {recpie?.imagePath ? (
+                          <img
+                            className="w-25"
+                            src={`https://upskilling-egypt.com:3006/${recpie?.imagePath}`}
+                            alt=""
+                          />
+                        ) : (
+                          <img className="w-25" src={logoDelete} alt="" />
+                        )}
+                      </div>
+                    </td>
+                    <td className="align-middle">{recpie?.price}</td>
+                    <td className="w-25 align-middle">{recpie?.description}</td>
+                    <td className="align-middle">{recpie?.tag?.name}</td>
+                    <td className="align-middle">
+                      {recpie?.category[0]?.name}
+                    </td>
+                    <td className="align-middle">
+                      <i
+                        onClick={() => handleShow(recpie?.id)}
+                        style={{ cursor: "pointer" }}
+                        className="fa-solid fa-trash ms-1 text-danger "
+                      ></i>
+                      <Link to={`/dashboard/recipe-list/${recpie.id}`}>
+                        <i
+                          style={{ cursor: "pointer" }}
+                          className="fa-solid fa-pen-to-square mx-3 text-warning"
+                        ></i>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+              <ul className="pagination d-flex justify-content-center">
+                <li className="page-item">
+                  <a
+                    className="page-link"
+                    style={{ cursor: "pointer" }}
+                    aria-label="Previous"
+                  >
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                {arrayOfPages.map((pages) => (
+                  <li
+                    className="page-item"
+                    key={pages}
+                    onClick={() => getRecpies(4, pages)}
+                  >
+                    <a className="page-link" style={{ cursor: "pointer" }}>
+                      {pages}
+                    </a>
+                  </li>
+                ))}
+
+                <li className="page-item">
+                  <a
+                    className="page-link"
+                    style={{ cursor: "pointer" }}
+                    aria-label="Next"
+                  >
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         ) : (
           <NoData />
         )}

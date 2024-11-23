@@ -10,18 +10,17 @@ const Verification = () => {
     formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm();
-  
+
   const Navigate = useNavigate();
   const onSubmit = async (data) => {
- try {
-    await axiosInstance.put(USERS_URLS.VERIFY_USER, data)
-    Navigate('/login')
-    toast.success("Done")
-  } catch (error) {
-    toast.error(error.response.data.message);
-    
-  }
-};
+    try {
+      await axiosInstance.put(USERS_URLS.VERIFY_USER, data);
+      Navigate("/login");
+      toast.success("Done");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
   return (
     <>
       <div className="title mb-4">
@@ -36,6 +35,7 @@ const Verification = () => {
             <i className="fa fa-envelope"></i>
           </span>
           <input
+            style={{ boxShadow: "none" }}
             type="text"
             className="form-control"
             placeholder="Enter your E-mail"
@@ -59,7 +59,7 @@ const Verification = () => {
             placeholder="Enter Your Code"
             aria-describedby="basic-addon1"
             {...register("code", {
-              required: "Code Is Required"
+              required: "Code Is Required",
             })}
           />
         </div>
@@ -68,7 +68,7 @@ const Verification = () => {
             {errors.code.message}
           </span>
         )}
-          <div>
+        <div>
           <button
             className="btn btn-success w-100 my-3"
             disabled={isSubmitting}
