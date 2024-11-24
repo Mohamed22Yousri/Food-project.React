@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import Header from "../shared/Header/Header";
 import HeaderDashboard from "./HeaderDashboard";
-export default function Dashboard({loginData}) {
+import { AuthContext } from "../context/Authcontext";
+export default function Dashboard() {
+  let { loginData } = useContext(AuthContext);
   return (
     <>
       <Header
@@ -9,7 +12,7 @@ export default function Dashboard({loginData}) {
       />
 
       <div className="m-3">
-        <HeaderDashboard/>
+        <HeaderDashboard />
       </div>
     </>
   );

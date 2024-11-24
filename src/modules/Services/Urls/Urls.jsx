@@ -30,6 +30,14 @@ export const RECIPES = {
   GET_AND_POST_RECIPES: "Recipe/",
   DELETE_AND_EDITE_RECIPES: (id) => `Recipe/${id}`,
 };
+
+
+
+export const USER_RECIPES = {
+  GET_FAV_LIST:  "userRecipe/",
+  Add_FAV_LIST:  "userRecipe/",
+  DELETE_FAV_LIST: (id)=> `userRecipe/${id}`,
+};
 //Tag
 export const TAG = {
   GET_TAG: "tag/",

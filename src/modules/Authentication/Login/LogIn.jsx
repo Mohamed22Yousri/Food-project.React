@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { axiosInstance, USERS_URLS } from "../../Services/Urls/Urls";
 import { VALID_EMAIL, VALID_PASSWORD } from "../../Services/Validition/Valid";
-import { useState } from "react";
+import {  useContext, useState } from "react";
+import { AuthContext } from "../../context/Authcontext";
 
-export default function LogIn({loginData}) {
+export default function LogIn() {
+  let {getToken} = useContext(AuthContext)
   const [isPasswordValid, setIsPasswordValid] = useState(false);
 
   let {
@@ -18,9 +20,9 @@ export default function LogIn({loginData}) {
     try {
       let res = await axiosInstance.post(USERS_URLS.LOGIN, data);
       localStorage.setItem("token", res.data.token);
-      loginData();
       toast.success("Login is successsfully");
       navgigate("/dashboard", { replace: true });
+      getToken()
       console.log("hello");
       
       

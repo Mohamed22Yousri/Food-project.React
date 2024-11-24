@@ -1,13 +1,15 @@
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import logo from "../../../assets/images/3.png";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import logoChange from "../../../assets/images/logo.png";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { axiosInstance, USERS_URLS } from "../../Services/Urls/Urls";
-export default function SidBar({ setLoginData, props }) {
+import { AuthContext } from "../../context/Authcontext";
+export default function SidBar({ props }) {
+  let { setLoginData, loginData } = useContext(AuthContext);
   const [toggle, setToggle] = useState(true);
   const [show, setShow] = useState(false);
   const [isConfirmValid, setIsConfirmValid] = useState(false);
@@ -51,24 +53,43 @@ export default function SidBar({ setLoginData, props }) {
             >
               Home
             </MenuItem>
-            <MenuItem
-              icon={<i className="fa-solid fa-users"></i>}
-              component={<Link to="/dashboard/user-list" />}
-            >
-              Users
-            </MenuItem>
-            <MenuItem
-              icon={<i className="fa-regular fa-calendar-days"></i>}
-              component={<Link to="/dashboard/category-list" />}
-            >
-              Categories
-            </MenuItem>
+            {loginData?.userGroup != "SystemUser" ? (
+              <MenuItem
+                icon={<i className="fa-solid fa-users"></i>}
+                component={<Link to="/dashboard/user-list" />}
+              >
+                Users
+              </MenuItem>
+            ) : (
+              ""
+            )}
+            {loginData?.userGroup != "SystemUser" ? (
+              <MenuItem
+                icon={<i className="fa-regular fa-calendar-days"></i>}
+                component={<Link to="/dashboard/category-list" />}
+              >
+                Categories
+              </MenuItem>
+            ) : (
+              ""
+            )}
+
             <MenuItem
               icon={<i className="fa-solid fa-receipt"></i>}
               component={<Link to="/dashboard/recipe-list" />}
             >
               Recipes
             </MenuItem>
+            {loginData?.userGroup == "SystemUser" ? (
+              <MenuItem
+                icon={<i className="fa-regular fa-heart"></i>}
+                component={<Link to="/dashboard/Favoret-list" />}
+              >
+                Favorites
+              </MenuItem>
+            ) : (
+              ""
+            )}
             <MenuItem
               onClick={handleShow}
               icon={<i className="fa-solid fa-unlock"></i>}

@@ -4,7 +4,7 @@ import SidBar from "../shared/Sidebar/SidBar";
 import { useEffect, useState } from "react";
 
 // eslint-disable-next-line react/prop-types
-export default function MasterLayout({loginData,setLoginData}) {
+export default function MasterLayout() {
   const [isAuth, setIsAith] = useState(() => {
     const token = localStorage.getItem("token");
     if (token) return true;
@@ -21,10 +21,10 @@ export default function MasterLayout({loginData,setLoginData}) {
     <>
      {isAuth && (
         <div className="d-flex">
-        <div  className=""><SidBar setLoginData={setLoginData}/>
+        <div  className=""><SidBar/>
         </div>
         <div className="w-100">
-            <NavBar loginData={loginData}/>
+            <NavBar/>
             <Outlet/>
         </div>
     </div>

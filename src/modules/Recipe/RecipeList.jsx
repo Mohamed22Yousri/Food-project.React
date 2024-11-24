@@ -1,6 +1,5 @@
 import Header from "../shared/Header/Header";
-import logoHeader from "../../assets/images/category-logo.png";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import DeleteConformation from "../shared/DeleteConformation/DeleteConformation";
@@ -11,11 +10,14 @@ import {
   CATEGORIES_URLS,
   RECIPES,
   TAG,
+  USER_RECIPES,
 } from "../Services/Urls/Urls";
 import Loading from "../shared/Loading/Loading";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/Authcontext";
 
 export default function Recipe() {
+  let { loginData } = useContext(AuthContext);
   const [recpies, setRecpies] = useState([]);
   const [tags, setTags] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -32,6 +34,13 @@ export default function Recipe() {
     setShow(true);
     setRecpieId(id);
   };
+  const addFavList = async (id) => {
+    let res = await axiosInstance.post(USER_RECIPES.Add_FAV_LIST, {
+      recipeId: id,
+    });
+    console.log(res.data);
+  };
+
   let deleteRecipe = async () => {
     await axiosInstance.delete(RECIPES.DELETE_AND_EDITE_RECIPES(recpieId));
     toast.success("Delete Recipe");
@@ -94,19 +103,22 @@ export default function Recipe() {
     <>
       <Header
         title={`Recipes Items`}
-        img={logoHeader}
         desc={`You can now add your items that any user can order it from the Application and you can edit`}
       />
       <div className="container-fluid my-4">
         <div className="d-flex justify-content-between align-items-center pt-2 pb-3">
           <h4>Recipes Table Details</h4>
           <Loading loading={loading} />
-          <Link
-            to="/dashboard/recipe-list/recipe-data"
-            className="btn btn-success py-2 px-4"
-          >
-            Add New Recipes
-          </Link>
+          {loginData?.userGroup != "SystemUser" ? (
+            <Link
+              to="/dashboard/recipe-list/recipe-data"
+              className="btn btn-success py-2 px-4"
+            >
+              Add New Recipes
+            </Link>
+          ) : (
+            ""
+          )}
         </div>
         <div className="row my-4">
           <div className="col-6">
@@ -145,7 +157,7 @@ export default function Recipe() {
                   {catogry.name}
                 </option>
               ))}
-            </select>{" "}
+            </select>
           </div>
         </div>
         {recpies.length > 0 ? (
@@ -185,19 +197,29 @@ export default function Recipe() {
                     <td className="align-middle">
                       {recpie?.category[0]?.name}
                     </td>
-                    <td className="align-middle">
-                      <i
-                        onClick={() => handleShow(recpie?.id)}
-                        style={{ cursor: "pointer" }}
-                        className="fa-solid fa-trash ms-1 text-danger "
-                      ></i>
-                      <Link to={`/dashboard/recipe-list/${recpie.id}`}>
+                    {loginData?.userGroup != "SystemUser" ? (
+                      <td className="align-middle">
                         <i
+                          onClick={() => handleShow(recpie?.id)}
                           style={{ cursor: "pointer" }}
-                          className="fa-solid fa-pen-to-square mx-3 text-warning"
+                          className="fa-solid fa-trash ms-1 text-danger "
                         ></i>
-                      </Link>
-                    </td>
+                        <Link to={`/dashboard/recipe-list/${recpie.id}`}>
+                          <i
+                            style={{ cursor: "pointer" }}
+                            className="fa-solid fa-pen-to-square mx-3 text-warning"
+                          ></i>
+                        </Link>
+                      </td>
+                    ) : (
+                      <td>
+                        <i
+                          onClick={() => addFavList(recpie.id)}
+                          style={{ color: "red" }}
+                          className="fa-regular fa-heart "
+                        ></i>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

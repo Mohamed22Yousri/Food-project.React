@@ -14,22 +14,14 @@ import MasterLayout from "./modules/MasterLayout/MasterLayout";
 import Categorydata from "./modules/category/Categorydata";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from "react";
+
 import ProtectRoute from "./modules/ProtectRoute/ProtectRoute";
 import Dashboard from "./modules/dashboard/dashboard";
 import Verification from "./modules/Authentication/Verify/Verification";
+import FavoretList from "./modules/Favoret-list/FavoretList";
 
 function App() {
-  const [loginData, setLoginData] = useState(null);
-  let getToken = () => {
-    let tokenDecode = localStorage.getItem("token");
-    let tokenEncode = jwtDecode(tokenDecode);
-    setLoginData(tokenEncode);
-  };
-  useEffect(() => {
-    if (localStorage.getItem("token")) getToken();
-  }, []);
+
 
   const routes = createBrowserRouter([
     {
@@ -39,9 +31,9 @@ function App() {
       children: [
         {
           index: true,
-          element: <LogIn loginData={loginData}/>,
+          element: <LogIn/>,
         },
-        { path: "login", element: <LogIn loginData={loginData} /> },
+        { path: "login", element: <LogIn/> },
         { path: "forget-pass", element: <ForgetPass /> },
         { path: "reset-pass", element: <ResetPass /> },
         { path: "register", element: <RegIster /> },
@@ -51,19 +43,20 @@ function App() {
     {
       path: "dashboard",
       element: (
-        <ProtectRoute loginData={loginData}>
-          <MasterLayout setLoginData={setLoginData} loginData={loginData} />
+        <ProtectRoute>
+          <MasterLayout />
         </ProtectRoute>
       ),
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Dashboard loginData={loginData} /> },
+        { index: true, element: <Dashboard /> },
         { path: "category-list", element: <CategoryList/> },
         { path: "category-data", element: <Categorydata /> },
         { path: "recipe-list", element: <RecipeList /> },
         { path: "recipe-list/recipe-data", element: <RecipeData /> },
         { path: "recipe-list/:recipeId", element: <RecipeData /> },
         { path: "user-list", element: <UserList /> },
+        { path: "Favoret-list", element: <FavoretList /> },
       ],
     },
   ]);
