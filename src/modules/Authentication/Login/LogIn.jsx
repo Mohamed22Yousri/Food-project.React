@@ -20,11 +20,9 @@ export default function LogIn() {
     try {
       let res = await axiosInstance.post(USERS_URLS.LOGIN, data);
       localStorage.setItem("token", res.data.token);
-      toast.success("Login is successsfully");
+      toast.success("Login is successfully");
       navgigate("/dashboard", { replace: true });
-      getToken()
-      console.log("hello");
-      
+      getToken()      
       
     } catch (error) {
       toast.error(error.response?.data?.message);

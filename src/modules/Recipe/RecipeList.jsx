@@ -215,7 +215,7 @@ export default function Recipe() {
                       <td>
                         <i
                           onClick={() => addFavList(recpie.id)}
-                          style={{ color: "red" }}
+                          style={{ color: "red", cursor: "pointer" }}
                           className="fa-regular fa-heart "
                         ></i>
                       </td>

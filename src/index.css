@@ -59,6 +59,9 @@
 input , select, textarea, a {
   box-shadow: none !important;
 }
+p {
+  word-wrap: break-word;
+}
 
 
 

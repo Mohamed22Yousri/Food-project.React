@@ -26,14 +26,14 @@ export default function SidBar({ props }) {
   let collaps = () => {
     setToggle(!toggle);
   };
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     try {
-      let response = axiosInstance.put(USERS_URLS.CHANGE_PASSWORD, data);
-      console.log(response);
+      let res = await axiosInstance.put(USERS_URLS.CHANGE_PASSWORD, data);
+      localStorage.setItem("token", res.data.token);
       toast.success("Done");
+      
     } catch (error) {
-      console.log(error);
-      toast.warning(error.response.data.message);
+      toast.error(error.response?.data?.message);
     }
   };
   return (
