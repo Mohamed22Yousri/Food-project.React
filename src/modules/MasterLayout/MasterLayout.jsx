@@ -3,7 +3,6 @@ import NavBar from "../shared/NavBar/NavBar";
 import SidBar from "../shared/Sidebar/SidBar";
 import { useEffect, useState } from "react";
 
-// eslint-disable-next-line react/prop-types
 export default function MasterLayout() {
   const [isAuth, setIsAith] = useState(() => {
     const token = localStorage.getItem("token");
