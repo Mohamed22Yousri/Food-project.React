@@ -16,7 +16,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import ProtectRoute from "./modules/ProtectRoute/ProtectRoute";
-import Dashboard from "./modules/dashboard/dashboard";
+import Dashboard from "./modules/dashboard/Dashboard";
 import Verification from "./modules/Authentication/Verify/Verification";
 import FavoretList from "./modules/Favoret-list/FavoretList";
 
