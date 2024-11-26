@@ -32,7 +32,7 @@ const FavoretList = () => {
           {favList.length > 0 ? (
             favList.map((favItem) => {
               return (
-                <div className="col-md-4 col-sm-6 col-12" key={favItem.id}>
+                <div className="col-md-4 col-sm-6 col-12 mt-4" key={favItem.id}>
                   <div className="item-fav shadow-lg p-3 mb-5 bg-body-tertiary rounded rounded-5">
                     <div className="mt-2 mb-3 text-end">
                       {" "}

@@ -31,12 +31,10 @@ export const RECIPES = {
   DELETE_AND_EDITE_RECIPES: (id) => `Recipe/${id}`,
 };
 
-
-
 export const USER_RECIPES = {
-  GET_FAV_LIST:  "userRecipe/",
-  Add_FAV_LIST:  "userRecipe/",
-  DELETE_FAV_LIST: (id)=> `userRecipe/${id}`,
+  GET_FAV_LIST: "userRecipe/",
+  Add_FAV_LIST: "userRecipe/",
+  DELETE_FAV_LIST: (id) => `userRecipe/${id}`,
 };
 //Tag
 export const TAG = {

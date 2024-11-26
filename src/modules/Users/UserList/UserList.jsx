@@ -72,7 +72,7 @@ export default function UserList() {
 
   const getNameVal = (input) => {
     setNameValu(input.target.value);
-    getUser(input.target.value, countryValu);
+    getUser(input.target.value, countryValu,groupValu);
   };
   const getEmailVal = (input) => {
     setCountryValu(input.target.value);

@@ -12,15 +12,13 @@ import { toast } from "react-toastify";
 import BeforeUnLoad from "../Hooks/BeforeUnLoad";
 
 const RecipeData = () => {
-  
   const [tags, setTags] = useState([]);
   const params = useParams();
   const [categories, setCategories] = useState([]);
   let navigate = useNavigate();
-  BeforeUnLoad(()=> {
+  BeforeUnLoad(() => {
     console.log("hello");
-    
-  })
+  });
   let {
     register,
     formState: { errors, isSubmitting },
@@ -85,7 +83,8 @@ const RecipeData = () => {
             setValue("price", recipe?.price);
             setValue("description", recipe?.description);
             setValue("tagId", recipe?.tag?.id);
-            setValue("categoriesIds", recipe?.catogrya?.[0]?.id);
+            setValue("recipeImage", recipe?.recipeImage?.id);
+            setValue("categoriesIds", recipe?.categoriesIds?.[0]?.id);
             console.log(recipeId);
           };
           getrecipeId();
@@ -95,8 +94,6 @@ const RecipeData = () => {
       }
     })();
   }, [recipeId, setValue, isNewRecipe]);
-
- 
 
   return (
     <>
@@ -159,7 +156,7 @@ const RecipeData = () => {
             className="form-select py-2 "
             aria-label="Default select example"
           >
-            <option disabled selected value="">
+            <option selected value="">
               Tag
             </option>
             {tags?.map((tag) => (
@@ -188,25 +185,27 @@ const RecipeData = () => {
         </div>
         <div className={styles["recipe-input"]}>
           <select
-            {...register("categoriesIds")}
+            {...register("categoriesIds", {
+              required: "Recipe Category Is Required",
+              validate: (value) => value !== "",
+            })}
             className="form-select py-2 "
             aria-label="Default select example"
           >
-            <option disabled selected>
-              Categ
-            </option>
+            <option selected>Categ</option>
             {categories?.map((catogry) => (
               <option key={catogry.id} value={catogry.id}>
                 {catogry.name}
               </option>
             ))}
           </select>
-          {errors.categoriesIds && (
+         
+        </div>
+        {errors.categoriesIds && (
             <div className="text-danger px-2 pt-2">
               {errors.categoriesIds?.message}
             </div>
           )}
-        </div>
         <div className={styles["recipe-input"]}>
           <div className="form-floating">
             <textarea
@@ -227,13 +226,20 @@ const RecipeData = () => {
         </div>
         <div className={styles["recipe-input"]}>
           <input
-            {...register("recipeImage")}
+            {...register("recipeImage", {
+              required:"Image Is Required"
+            })}
             className="form-control py-2"
             type="file"
             placeholder="Recipe Name"
             aria-label="form-control example"
           />
         </div>
+        {errors.recipeImage && (
+            <div className="text-danger px-2 pt-2">
+              {errors.recipeImage?.message}
+            </div>
+          )}
         <div
           className="d-flex justify-content-end align-items-center"
           style={{ gap: "20px" }}
