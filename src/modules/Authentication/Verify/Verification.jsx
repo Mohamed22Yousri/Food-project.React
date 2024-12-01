@@ -73,7 +73,7 @@ const Verification = () => {
             className="btn btn-success w-100 my-3"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Verify ..." : "Verify"}
+            {isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : "Verify"}
           </button>
         </div>
       </form>

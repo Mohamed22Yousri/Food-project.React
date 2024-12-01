@@ -171,7 +171,7 @@ export default function RegIster() {
 
         <div className="text-center">
           <button disabled={isSubmitting} className="btn btn-success mt-5 w-75">
-            {isSubmitting ? "registration ..." : "Register"}
+            {isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : "Register"}
           </button>
         </div>
       </form>

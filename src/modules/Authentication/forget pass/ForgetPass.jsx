@@ -53,7 +53,7 @@ export default function ForgetPass() {
             className="btn btn-success w-100 mt-5 mb-2"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Submitting ..." : "Submit"}
+            {isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : "Submit"}
           </button>
         </div>
       </form>

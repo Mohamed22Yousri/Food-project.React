@@ -12,7 +12,7 @@ export default function ResetPass() {
   const location = useLocation()
   let {
     register,
-    formState: { errors },
+    formState: { errors ,isSubmitting },
     handleSubmit,
   } = useForm({defaultValues:{email:location.state}});
   let navigate = useNavigate();
@@ -138,8 +138,12 @@ export default function ResetPass() {
           </button>
         </div>
         <div>
-          <button className="w-100 btn btn-success my-3">Reset Password</button>
-        </div>
+        <button
+            className="btn btn-success w-100 my-3"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : "Reset Password"}
+          </button>        </div>
       </form>
     </>
   );

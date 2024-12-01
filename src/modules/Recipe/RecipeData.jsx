@@ -77,15 +77,12 @@ const RecipeData = () => {
             const res = await axiosInstance.get(
               RECIPES.DELETE_AND_EDITE_RECIPES(recipeId)
             );
-            console.log(res.data);
             const recipe = res?.data;
             setValue("name", recipe?.name);
             setValue("price", recipe?.price);
             setValue("description", recipe?.description);
             setValue("tagId", recipe?.tag?.id);
-            setValue("recipeImage", recipe?.recipeImage?.id);
-            setValue("categoriesIds", recipe?.categoriesIds?.[0]?.id);
-            console.log(recipeId);
+            setValue("categoriesIds", recipe?.category[0]?.id);
           };
           getrecipeId();
         }
@@ -184,7 +181,7 @@ const RecipeData = () => {
           )}
         </div>
         <div className={styles["recipe-input"]}>
-          <select
+             <select
             {...register("categoriesIds", {
               required: "Recipe Category Is Required",
               validate: (value) => value !== "",
@@ -192,20 +189,21 @@ const RecipeData = () => {
             className="form-select py-2 "
             aria-label="Default select example"
           >
-            <option selected>Categ</option>
+            <option selected value="">
+            Categ
+            </option>
             {categories?.map((catogry) => (
               <option key={catogry.id} value={catogry.id}>
                 {catogry.name}
               </option>
             ))}
           </select>
-         
         </div>
         {errors.categoriesIds && (
-            <div className="text-danger px-2 pt-2">
-              {errors.categoriesIds?.message}
-            </div>
-          )}
+          <div className="text-danger px-2 pt-2">
+            {errors.categoriesIds?.message}
+          </div>
+        )}
         <div className={styles["recipe-input"]}>
           <div className="form-floating">
             <textarea
@@ -227,7 +225,7 @@ const RecipeData = () => {
         <div className={styles["recipe-input"]}>
           <input
             {...register("recipeImage", {
-              required:"Image Is Required"
+              // required:"Image Is Required"
             })}
             className="form-control py-2"
             type="file"
@@ -235,11 +233,11 @@ const RecipeData = () => {
             aria-label="form-control example"
           />
         </div>
-        {errors.recipeImage && (
+        {/* {errors.recipeImage && (
             <div className="text-danger px-2 pt-2">
               {errors.recipeImage?.message}
             </div>
-          )}
+          )} */}
         <div
           className="d-flex justify-content-end align-items-center"
           style={{ gap: "20px" }}

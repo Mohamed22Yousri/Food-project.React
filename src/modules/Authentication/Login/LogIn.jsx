@@ -98,7 +98,7 @@ export default function LogIn() {
             className="btn btn-success w-100 my-3"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Submitting ..." : "Login"}
+            {isSubmitting ? <i className="fa fa-spinner fa-spin"></i> : "Login"}
           </button>
         </div>
       </form>

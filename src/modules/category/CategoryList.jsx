@@ -22,6 +22,9 @@ export default function CategoryList() {
   const handleClose = () => setShow(false);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get("page");
+  const initialPage = page ? parseInt(page, 10) : 1;
   let getcategory = async (PageSize, pageNo, name) => {
     try {
       setLoading(true);
@@ -46,16 +49,26 @@ export default function CategoryList() {
   const getNameVal = (input) => {
     getcategory(4, 1, input.target.value);
   };
+ 
   useEffect(() => {
-    getcategory(4, 1);
+   
+    getcategory(4, initialPage);
   }, []);
+  const handlePageChange = (page) => {
+    const url = new URL(window.location);
+    url.searchParams.set("page", page);
+    window.history.pushState({}, "", url);
+
+    getcategory(4, page);
+  };
+
   let deleteCategory = async () => {
     try {
       await axiosInstance.delete(
         CATEGORIES_URLS.DELETE_AND_EDITE_CATEGORIES(selectId)
       );
       toast.success("Delete Category");
-      getcategory();
+      getcategory(4, page);
       handleClose();
     } catch (error) {
       console.log(error);
@@ -102,7 +115,7 @@ export default function CategoryList() {
         data
       );
       toast.success("Edit Category");
-      getcategory(4, 1);
+      getcategory(4, page);
     } catch (error) {
       console.log(error);
     }
@@ -139,7 +152,6 @@ export default function CategoryList() {
 
         {categories.length > 0 ? (
           <div>
-
             <table className="table text-center mt-4">
               <thead>
                 <tr className="table-primary">
@@ -182,10 +194,14 @@ export default function CategoryList() {
                 </li>
                 {arrayOfPages.map((pages) => (
                   <li
-                    className="page-item"
+                    className={`page-item ${
+                      parseInt(window.location.search.split("=")[1]) === pages
+                        ? "active"
+                        : ""
+                    }`}
                     key={pages}
-                    onClick={() => getcategory(4, pages)}
-                  >
+                    onClick={() => handlePageChange(pages)}
+                    >
                     <a style={{ cursor: "pointer" }} className="page-link">
                       {pages}
                     </a>
@@ -245,7 +261,7 @@ export default function CategoryList() {
                   className="btn btn-success px-5 py-2 my-3"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Save ..." : "Save"}
+                  {isSubmitting ?  <i className="fa fa-spinner fa-spin"></i> : "Save"}
                 </button>
               </div>
             </form>
@@ -284,7 +300,7 @@ export default function CategoryList() {
                   onClick={handleCloseEdit}
                   className="btn btn-success px-5 py-2 my-3"
                 >
-                  {isSubmitting ? "Save ..." : "Save"}
+                  {isSubmitting ?  <i className="fa fa-spinner fa-spin"></i> : "Save"}
                 </button>
               </div>
             </form>

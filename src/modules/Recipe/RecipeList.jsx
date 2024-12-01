@@ -28,6 +28,9 @@ export default function Recipe() {
   const [nameValu, setNameValu] = useState("");
   const [tagValu, settagValu] = useState("");
   const [catValu, setcatValu] = useState("");
+   const params = new URLSearchParams(window.location.search);
+    const page = params.get("page");
+    const initialPage = page ? parseInt(page, 10) : 1;
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -44,7 +47,7 @@ export default function Recipe() {
   let deleteRecipe = async () => {
     await axiosInstance.delete(RECIPES.DELETE_AND_EDITE_RECIPES(recpieId));
     toast.success("Delete Recipe");
-    getRecpies();
+    getRecpies(4, initialPage);
     handleClose();
   };
 
@@ -93,11 +96,20 @@ export default function Recipe() {
     setcatValu(input.target.value);
     getRecpies(4, 1, nameValu, tagValu, input.target.value);
   };
+
   useEffect(() => {
-    getRecpies(4, 1);
+   
+    getRecpies(4, initialPage, nameValu, tagValu, catValu);
     getTag();
     getCategories();
   }, []);
+  const handlePageChange = (page) => {
+    const url = new URL(window.location);
+    url.searchParams.set("page", page);
+    window.history.pushState({}, "", url);
+
+    getRecpies(4, page, nameValu, tagValu, catValu);
+  };
 
   return (
     <>
@@ -237,10 +249,14 @@ export default function Recipe() {
                 </li>
                 {arrayOfPages.map((pages) => (
                   <li
-                    className="page-item"
+                    className={`page-item ${
+                      parseInt(window.location.search.split("=")[1]) === pages
+                        ? "active"
+                        : ""
+                    }`}
                     key={pages}
-                    onClick={() => getRecpies(4, pages)}
-                  >
+                    onClick={() => handlePageChange(pages)}
+                    >
                     <a className="page-link" style={{ cursor: "pointer" }}>
                       {pages}
                     </a>
