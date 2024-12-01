@@ -7,6 +7,7 @@ import { axiosInstance, USERS_URLS } from "../../Services/Urls/Urls";
 import Header from "../../shared/Header/Header";
 import NoData from "../../shared/NoData/NoData";
 import DeleteConformation from "../../shared/DeleteConformation/DeleteConformation";
+import Loading from "../../shared/Loading/Loading";
 
 export default function UserList() {
   const [nameValu, setNameValu] = useState("");
@@ -17,6 +18,7 @@ export default function UserList() {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState();
   const [selectedUserDetails, setSelectedUserDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const closeDeleteModal = () => setShowDeleteModal(false);
   const closeDetailsModal = () => setShowDetailsModal(false);
@@ -68,6 +70,10 @@ export default function UserList() {
     } catch (error) {
       console.log(error);
     }
+    finally {
+      setLoading(false);
+    }
+    
   };
 
   const getNameVal = (input) => {
@@ -90,7 +96,7 @@ export default function UserList() {
   return (
     <>
       <Header
-        title="User List"
+       title="User List"
         img={logoHeader}
         desc="You can now add your items that any user can order it from the Application and you can edit"
       />
@@ -131,6 +137,7 @@ export default function UserList() {
             </div>
           </div>
         </div>
+        <Loading loading={loading} />
         {userList.length > 0 ? (
           <div>
             <table className="table text-center mt-2 .table-container">

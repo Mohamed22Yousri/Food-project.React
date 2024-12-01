@@ -108,7 +108,6 @@ export default function Recipe() {
       <div className="container-fluid my-4">
         <div className="d-flex justify-content-between align-items-center pt-2 pb-3">
           <h4>Recipes Table Details</h4>
-          <Loading loading={loading} />
           {loginData?.userGroup != "SystemUser" ? (
             <Link
               to="/dashboard/recipe-list/recipe-data"
@@ -160,6 +159,7 @@ export default function Recipe() {
             </select>
           </div>
         </div>
+        <Loading loading={loading} />
         {recpies.length > 0 ? (
           <div className="">
             <table className="table text-center mt-2 .table-container">

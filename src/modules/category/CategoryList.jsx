@@ -118,7 +118,6 @@ export default function CategoryList() {
       <div className="container-fluid mt-4 mb-5">
         <div className="d-flex align-items-center justify-content-between">
           <h4>Categories Table Details</h4>
-          <Loading loading={loading} />
 
           <button onClick={handleShowAdd} className="btn btn-success py-2 px-4">
             Add New Category
@@ -136,8 +135,11 @@ export default function CategoryList() {
             </div>
           </div>
         </div>
+        <Loading loading={loading} />
+
         {categories.length > 0 ? (
           <div>
+
             <table className="table text-center mt-4">
               <thead>
                 <tr className="table-primary">
