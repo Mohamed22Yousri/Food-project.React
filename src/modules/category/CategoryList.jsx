@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import Modal from "react-bootstrap/Modal";
 
 import Header from "../shared/Header/Header";
 import { toast } from "react-toastify";
@@ -9,6 +8,7 @@ import NoData from "../shared/NoData/NoData";
 import { useForm } from "react-hook-form";
 import { axiosInstance, CATEGORIES_URLS } from "../Services/Urls/Urls";
 import Loading from "../shared/Loading/Loading";
+import CustomModal from "./CustomModal";
 
 export default function CategoryList() {
   const [arrayOfPages, setArrayOfPages] = useState([]);
@@ -49,9 +49,8 @@ export default function CategoryList() {
   const getNameVal = (input) => {
     getcategory(4, 1, input.target.value);
   };
- 
+
   useEffect(() => {
-   
     getcategory(4, initialPage);
   }, []);
   const handlePageChange = (page) => {
@@ -68,16 +67,17 @@ export default function CategoryList() {
         CATEGORIES_URLS.DELETE_AND_EDITE_CATEGORIES(selectId)
       );
       toast.success("Delete Category");
-      getcategory(4, page);
+      getcategory(4, initialPage);
       handleClose();
     } catch (error) {
       console.log(error);
     }
   };
-  // Add category
-  const [showAdd, setShowAdd] = useState(false);
-  const handleShowAdd = () => setShowAdd(true);
-  const handleCloseAdd = () => setShowAdd(false);
+  //ADD EDITE
+  const [isEdit, setIsEdit] = useState(false);
+  const [modalTitle, setModalTitle] = useState("Add Category");
+  const [currentId, setCurrentId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   let {
     register,
     formState: { errors, isSubmitting },
@@ -85,38 +85,42 @@ export default function CategoryList() {
     reset,
     setValue,
   } = useForm();
+
+  const handleShowModal = (isEditing = false, category = null) => {
+    setShowModal(true);
+    setIsEdit(isEditing);
+    setModalTitle(isEdit ? "Add Category" : "Edit Category");
+    if (isEditing && category) {
+      setCurrentId(category.id);
+      setValue("name", category.name);
+    }
+    setShowModal(true);
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
+    reset();
+  };
+
   const onSubmit = async (data) => {
     try {
-      await axiosInstance.post(
-        `${CATEGORIES_URLS.GET_AND_POST_CATEGORIES}`,
-        data
-      );
-      reset();
-      toast.success("Add Category");
-      handleCloseAdd();
+      if (isEdit) {
+        await axiosInstance.put(
+          CATEGORIES_URLS.DELETE_AND_EDITE_CATEGORIES(currentId),
+          data
+        );
+        toast.success("Category Edited Successfully");
+      } else {
+        await axiosInstance.post(
+          `${CATEGORIES_URLS.GET_AND_POST_CATEGORIES}`,
+          data
+        );
+        toast.success("Category Added Successfully");
+      }
+
+      handleCloseModal();
       getcategory(4, 1);
     } catch (error) {
-      console.log(error);
-    }
-  };
-  // Edit category
-  const [EdiltId, setEditId] = useState(null);
-  const [showEdit, setShowEdit] = useState(false);
-  const handleShowEdit = (id, category) => {
-    setEditId(id);
-    setValue("name", category.name);
-    setShowEdit(true);
-  };
-  const handleCloseEdit = () => setShowEdit(false);
-  const onSubmitEdit = async (data) => {
-    try {
-      await axiosInstance.put(
-        CATEGORIES_URLS.DELETE_AND_EDITE_CATEGORIES(EdiltId),
-        data
-      );
-      toast.success("Edit Category");
-      getcategory(4, page);
-    } catch (error) {
+      toast.error("An error occurred. Please try again.");
       console.log(error);
     }
   };
@@ -132,7 +136,10 @@ export default function CategoryList() {
         <div className="d-flex align-items-center justify-content-between">
           <h4>Categories Table Details</h4>
 
-          <button onClick={handleShowAdd} className="btn btn-success py-2 px-4">
+          <button
+            onClick={() => handleShowModal(false)}
+            className="btn btn-success py-2 px-4"
+          >
             Add New Category
           </button>
         </div>
@@ -173,7 +180,7 @@ export default function CategoryList() {
                       ></i>
                       <i
                         style={{ cursor: "pointer" }}
-                        onClick={() => handleShowEdit(category.id, category)}
+                        onClick={() => handleShowModal(category.id, category)}
                         className="fa-solid fa-pen-to-square mx-3 text-warning"
                       ></i>
                     </td>
@@ -201,7 +208,7 @@ export default function CategoryList() {
                     }`}
                     key={pages}
                     onClick={() => handlePageChange(pages)}
-                    >
+                  >
                     <a style={{ cursor: "pointer" }} className="page-link">
                       {pages}
                     </a>
@@ -230,83 +237,16 @@ export default function CategoryList() {
         handleClose={handleClose}
         deleteItem={"category"}
       />
-
-      <Modal show={showAdd} onHide={handleCloseAdd}>
-        <Modal.Header closeButton className="border border-0">
-          <h3>Add Category</h3>
-        </Modal.Header>
-        <Modal.Body>
-          <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="input-group mb-2">
-                <input
-                  style={{ border: "none", outline: "none" }}
-                  type="text"
-                  className="w-100 px-2 py-3 bg-light"
-                  placeholder="Category Name "
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...register("name", {
-                    required: "name Is Required",
-                  })}
-                />
-              </div>
-              {errors.name && (
-                <span className="text-danger px-2 mb-2 d-block">
-                  {errors.name.message}
-                </span>
-              )}
-              <div className="text-end">
-                <button
-                  className="btn btn-success px-5 py-2 my-3"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ?  <i className="fa fa-spinner fa-spin"></i> : "Save"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={showEdit} onHide={handleCloseEdit}>
-        <Modal.Header closeButton className="border border-0">
-          <h3>Edit Category</h3>
-        </Modal.Header>
-        <Modal.Body>
-          <div>
-            <form onSubmit={handleSubmit(onSubmitEdit)}>
-              <div className="input-group mb-2">
-                <input
-                  style={{ border: "none", outline: "none" }}
-                  type="text"
-                  className="w-100 px-2 py-3 bg-light"
-                  placeholder="Category Name "
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...register("name", {
-                    required: "name Is Required",
-                  })}
-                />
-              </div>
-              {errors.name && (
-                <span className="text-danger px-2 mb-2 d-block">
-                  {errors.name.message}
-                </span>
-              )}
-              <div className="text-end">
-                <button
-                  disabled={isSubmitting}
-                  onClick={handleCloseEdit}
-                  className="btn btn-success px-5 py-2 my-3"
-                >
-                  {isSubmitting ?  <i className="fa fa-spinner fa-spin"></i> : "Save"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <CustomModal
+        showModal={showModal}
+        modalTitle={modalTitle}
+        register={register}
+        errors={errors}
+        handleSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+        handleCloseModal={handleCloseModal}
+        onSubmit={onSubmit}
+      />
     </>
   );
 }
